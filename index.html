@@ -2,188 +2,396 @@
 <html lang="en">
 
 <head>
-  <title>Working on a Web Application</title>
+  <title>Web Sprint 2 Challenge</title>
   <style>
-    #verse {
+    .widget {
+      padding: 0 0 0.5rem 0.65rem;
+      margin-bottom: 0.5rem;
+      border: 1px solid black;
+      border-radius: 0.5rem;
+    }
+
+    .widget p {
+      font-size: 0.75rem;
       font-style: italic;
-      font-size: 2em;
+    }
+
+    .row>div {
+      display: inline-block;
+      background-color: lightgrey;
+      border: 1px solid grey;
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+    }
+
+    #outcome {
+      font-size: 3rem;
     }
 
   </style>
 </head>
 
 <body>
-  <h1>Working on a Web Application</h1>
-  <p>Please load this file in VSCode and Chrome, and open the Console in Chrome Dev Tools.</p>
-  <p>Work through the challenges found inside the last script tag in this document,
-    until the verse below reads correctly and the Console reports all tests passing.</p>
-  <p id="verse"></p>
+  <h1>Web Sprint 2 Challenge </h1>
+  <p>❗ See the last script tag for instructions on completing your Challenge</p>
+  <!-- widgets start -->
+  <section class="widget">
+    <p>Click on a square! (this widget uses the mineSweeper function)</p>
+    <div class="row" id="row1">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="row" id="row2">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="row" id="row3">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <span id="outcome"></span>
+  </section>
+  <form class="widget">
+    <p>Type a ten-digit number! (this widget uses the normalizePhoneNumber function)</p>
+    <input type="text" id="phoneNumInput" maxlength="10" />
+    <span id="normalized"></span>
+  </form>
+  <!-- widgets end -->
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.js"></script>
-  <script>
-    // In CHALLENGES 1-8 you will write JavaScript statements to assign certain values to the "result" variables.
-    // (The "result" variables below are declared with let so we can assign values to them later.)
-    let result1, result2, result3, result4, result5, result6, result7, result8;
+  <!-- The first script tag loads a library called lodash that helps with testing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+  <script id="challenge">
+    // In CHALLENGES 1-6 you will write JavaScript functions
 
-    // To do this, translate each 🧠 pseudocode into a working set of statements.
-    // ❗ Do not change the values of any of the variables provided below.
-    // ❗ You can create new variables if you need to.
-    // ❗ The first challenge is already done for you:
+    // ❗ Functions are scaffolded for you, but are missing their parameters and bodies
+    // ❗ Do not rename the functions provided, and do not create any other script tags
+    // ❗ Do not modify the location of the two script tags in this document
+    // ❗ Debug properly using the Console
 
     // 👉 CHALLENGE 1
-    const num1 = 6;
-    const num2 = 5;
-    const num3 = 938460;
-    // 🧠 pseudocode:
-    // Statement 1: result1 is num1 to the num2th power, adding to the result of that the num3.
-    // Statement 2: result1 is itself, plus the remainder of dividing 10 by 3.
-    result1 = (num1 ** num2) + num3;
-    result1 += (10 % 3);
+    function profileActivation(profile, reason) {
+      // 🧠 profileActivation takes two arguments, profile and reason, which are an object and a string respectively
+      //  The reason arg is only used -and therefore required- to deactivate profiles, not to activate them
+      //  The profile arg has an `active` property holding a Boolean value
+      //    * If profile is active, profileActivation deactivates it and writes a `reason` prop holding the reason
+      //    * If profile is inactive, profileActivation activates it and deletes the `reason` prop from the object
+      //    * In both cases the updated profile object is returned
+      // 🧠 Edge cases:
+      //    * If the profile is inactive but its `reason` prop is **missing**, return the string "confirm status manually"
+      //    * If the profile is active but it has a `reason` prop, return the string "confirm status manually"
+      //    * If the profile is **missing** an `active` prop, return the string "impossible to ascertain status"
+      // 🌟 HINT: to confirm the existence of a prop, check that its value is not undefined
+      
+    //console.log(profile.reason, reason)
+      //Runs edge cases
+     
+      if (profile.active === false && profile.reason === undefined){
+        return "confirm status manually"
+      }
+      if ((profile.active === true) && (profile.reason !== undefined) && (reason === undefined)){
+        return "confirm status manually"
+      }
+      if (profile.active === undefined){
+        return "impossible to ascertain status"
+      }
+      if ((profile.active === true) && (profile.reason === undefined) && (reason !== undefined)){
+        profile.active = false
+        profile.reason = reason 
+        return profile
+      }
+      //Runs the main code
+      if ((profile.active === true)){
+        profile.active = false
+        return profile
+        }
+      if ((profile.active === false) && (profile.reason !== undefined)){
+        profile.active = true
+        delete profile.reason
+        return profile
+        }
+      
+      
+
+     
+    }
 
     // 👉 CHALLENGE 2
-    const age1 = 38;
-    const age2 = 26;
-    // 🧠 pseudocode:
-    // Statement 1: assign to result2 the average of age1 and age2.
-    // Statement 2: increment result2 by one, using plus plus.
-    // Statement 3: declare a variable using let (choose a name that does not already exist in the script), assigning it number 10.
-    // Statement 4: decrease the value of your variable by 1, using minus minus.
-    // Statement 5: decrement result2 by the amount held inside the variable declared in Statement 3.
-    result2 = (age1 + age2) / 2;
-    result2++;
-    let ten = 10
-    ten--
-    result2 = result2 - (ten)
+    function mineSweeper(grid, x, y) {
+      // 🧠 mineSweeper takes a grid as its first argument, and coordinates x and y as the second and third args
+      //  The grid is an array of arrays in the following format: [["🟥","🟦","🟥"],["🟦","🟥","🟥"],["🟥","🟦","🟦"]]
+      //  Each subarray is a row of the grid, the first subarray being the top row:
+      //  [
+      //    ["🟥", "🟦", "🟥"],
+      //    ["🟦", "🟥", "🟥"],
+      //    ["🟥", "🟦", "🟦"]
+      //  ]
+      //  The coordinates x and y are numbers: either 1 or 2 or 3
+      //    * An x = 1 and y = 1 means the top-left square
+      //    * An x = 3 and y = 1 means the top-right square
+      //    * An x = 3 and y = 3 means the bottom-right square
+      //  Red squares are mines and blue squares are safe
+      //    * If mineSweeper is called with such coordinates that the player lands on red, return the string "🟥 💀"
+      //    * If the player lands on blue, return the string "🟦 🥳"
+      // 🧠 Edge cases:
+      //    * If the x or y coordinates are under 1 or over 3, return the string "invalid coordinates"
+
+      if ((x > 3) || (x < 1) || (y > 3) || (y < 1)){
+        return "invalid coordinates"
+      }
+
+      if ((x <= 3) && (x >= 1) && (y <= 3) && (y >= 1)){
+        x = x - 1
+        y = y - 1 
+        if (grid[y][x] === "🟦"){
+          return "🟦 🥳"
+        }
+        if (grid[y][x] === "🟥"){
+          return "🟥 💀"
+        }
+      } 
+    }
 
     // 👉 CHALLENGE 3
-    const val1 = 'mekjgchkjrtehvcmhrekjtlhmkjlvchauyshptbywkfgowximecmunkjrthlv';
-    const val2 = 'kjwerhgmsdsdjkgfuxcibnwufhyuaywqhevckergjmdqlcitelcrhklerhmklm';
-    const val3 = 'ksljdrghmkjetrhgmrkejtdsafhjhfdswqegxzoeutewhqwmthrekidjltrem';
-    // 🧠 pseudocode:
-    // Statement 1: declare a variable using const, assigning to it the concatenation of val1, val2, and val3.
-    // Statement 2: assign to result3 the number of characters in the concatenated string.
-    // ❗ Note: the number of characters in a string can be found using DOT length. Example:
-    //    const someString = 'abc';
-    //    console.log(someString.length); // prints 3
-    const conAll = (val1.length) + " " + (val2.length) + " " + (val3.length)
-    
+    function booleanize(object) {
+      // 🧠 booleanize takes an object as its single argument, which can have any number of properties
+      // Loop over the properties and then return the object, after applying the following transformations:
+      //    * If a value is the number zero, it must be transformed into the Boolean false
+      //    * If a value is the number one, it must be transformed into the Boolean true
+      //    * If a value is null, the whole key-value pair must be deleted from the object
+      // 🧠 Edge cases:
+      //    * If a property name exceeds 9 characters, return the string "shorten all prop names to 9 chars or less"
+      // 🌟 HINT: careful not to perform any unintended changes on the object
+       
+      // console.log(object['a'])
+      for (i in object){
+        if (object[i] === 0){
+          object[i] = false
+        }
+        if (object[i] === 1){
+          object[i] = true
+        }
+        if (object[i] === null){
+          delete object[i]
+        }  
+        //console.log(i.length)
+        if(i.length >= 9){
+          return "shorten all prop names to 9 chars or less"
+        }
+      }
+      
+      return object
+    }
 
     // 👉 CHALLENGE 4
-    const data1 = 5;
-    const data2 = 10;
-    const data3 = 20;
-    // 🧠 pseudocode:
-    // Statement 1: declare a variable with const holding a Boolean: whether data1 is bigger than data2.
-    // Statement 2: declare another variable with const holding a Boolean: whether your last variable is strictly equal to the string "false".
-    // Statement 3: assign to result4 the value of the variable declared in Statement 2.
-    // Statement 4: reassign to result4 itself plus the value in data3 (see in the Console what happens when you add a number to a Boolean!)
-    const bigger = data1 > data2 
-    const equal = bigger === false 
-    result4 = equal
-    result4 = result4 + data3
-  
-    
-    // 👉 CHALLENGE 5
-    const int1 = 67;
-    const int2 = 67;
-    const int3 = 96;
-    // 🧠 pseudocode:
-    // Statement 1: declare a variable with const, holding a Boolean: whether int1 smaller or equal to int2.
-    // Statement 2: declare a variable with const, holding a Boolean: whether int2 smaller or equal to int3.
-    // Statement 3: assign result5 to be a Boolean expression: your first var AND your second var.
-    // Statement 4: reassign result5 to itself, plus the remainder of dividing int3 by int2.
-    const great = int1 <= int2
-    const small = int2 <= int3
-    result5 = great && small
-    result5 = result5 + (int3 % int2)
-    
+    function scrub(text, forbidden) {
+      // 🧠 scrub takes a string "text" as its first argument, and an array of forbidden words "forbidden" as its second
+      // Any word in the text included in the array of forbidden words is replaced with a word of equal length but made of lowcase "x"
+      // The scrubbed text is then returned from the function, as seen in the examples below
+      // No punctuation is used in the text
+      // 🧠 Examples of usage:
+      //    scrub("out of the silent planet", ["of", "silent"]) // returns "out xx the xxxxxx planet"
+      //    scrub("the ghost of the navigator", ["the"]) // returns "xxx ghost of xxx navigator"
+      //    scrub("lost somewhere in time", []) // returns "lost somewhere in time"
+      //    scrub("aces high", ["high", "aces", "hearts"]) // returns "xxxx xxxx"
+      //    scrub("", ["high", "aces""]) // returns ""
+      // 🌟 HINT: useful array methods to use are `push`, `indexOf`, `split`, `join`
+      num = text.split(' ')
+      
+      
+      for(let i = 0; i < num.length; i++){
 
-
-    // 👉 CHALLENGE 6
-    const amount1 = 4.5;
-    const amount2 = 3;
-    const amount3 = 15;
-    // 🧠 pseudocode:
-    // Statement 1: declare a variable with const, holding a Boolean: whether amount1 and amount2 are of the same type.
-    // Statement 2: declare a variable with const, holding a Boolean: whether either amount1 OR amount2 is an odd number.
-    // Statement 3: assign result6 to be a Boolean expression: your first var OR your second var OR the Boolean false.
-    // Statement 4: reassign result6 to be itself minus amount3.
-    const nappa = typeof amount1 === typeof amount2
-    const vegeta = (amount1 % 2 > 0) || (amount2 % 2 > 0) 
-    result6 = nappa || vegeta || false
-    result6 = result6 - amount2
-    
-
-    // 👉 CHALLENGE 7
-    const friend1 = undefined;
-    const friend2 = 'undefined';
-    const friend3 = 7;
-    const friend4 = NaN;
-    // 🧠 pseudocode:
-    // Statement 1: declare a variable with const, holding a Boolean: whether both friend1 and friend2 are of the same type.
-    // Statement 2: declare a variable with const, holding a Boolean: whether both friend3 and friend4 are of the same type.
-    // Statement 3: assign to result7 whether any of your variables holds the Boolean true.
-    // Statement 4: assign result7 to be your second variable minus number 23.
-    const goku = typeof friend1 === typeof friend2 
-    const goten = typeof friend3 === typeof friend4
-    result7 = goku === true || goten === true  
-    result7 = goten - 23
-    
-    // 👉 CHALLENGE 8
-    const winter = 0;
-    const spring = 1;
-    const summer = 2;
-    const fall = 3;
-    // 🧠 pseudocode:
-    // Statement 1: declare a variable holding whether season 4893792381 is winter OR summer.
-    // Statement 2: declare another variable holding whether whether season 845789437 is not fall.
-    // Statement 3: declare a third variable holding whether season 85947 is not spring AND season 84957 is not fall.
-    // Statement 4: assign result8 to be 707 minus the sum of your three variables.
-    // ❗ Note: the modulo operator is the key to solving this mistery. Also, seasons are zero-based: the first one is 0.
-    const bulma = 4893792381 % 4 === winter || 4893792381 % 4 === summer
-    const chichi = 845789437 % 4 !== fall
-    const videl = 85947 % 4 !== spring && 85947 % 4 !== fall
-    result8 = 707 - bulma - chichi - videl 
-    
-
-    // 🧪 TESTS, do not work below this line
-    // 🧪 TESTS, do not work below this line
-    // 🧪 TESTS, do not work below this line
-    let results = [
-      ['9647ded197b482a90bb1a92c27bc0386', result1],
-      ['1ff1de774005f8da13f42943881c655f', result2],
-      ['6cdd60ea0045eb7a6ec44c54d29ed402', result3],
-      ['98f13708210194c475687be6106a3b84', result4],
-      ['34173cb38f07f89ddbebc2ac9128303f', result5],
-      ['66d8c0f4ab3c3681ff3f9093b05136a6', result6],
-      ['8d2b9e08aff3573e99ce7966a0dd4628', result7],
-      ['4a47d2983c8bd392b120b627e0e1cab4', result8],
-    ]
-    function buildFinalResult(results) {
-      const alphabet = 'abcdefghijklmnopqrstuvwxyz'
-      const chars = []
-      results.forEach(([hash, result], i) => {
-        const isCorrect = md5(result) === hash
-        console.log(`[TEST] result${i + 1} ${isCorrect ? 'looks good ✅' : 'is incorrect ❌'}`)
-        const letter = isCorrect ? fromNumToLetter(result) : alphabet[Math.floor(Math.random() * 26)]
-        chars.push(letter)
-      })
-      verse.textContent = `
-        ${chars[2]}r${chars[4]}a${chars[0]}${chars[4]},
-        inn${chars[5]}va${chars[0]}${chars[4]},
-        an${chars[7]}
-        ${chars[2]}hang${chars[4]}
-        ${chars[1]}${chars[5]}${chars[3]}r
-        ${chars[6]}${chars[5]}rl${chars[7]}
-        ${chars[6]}i${chars[0]}h
-        ${chars[2]}${chars[5]}${chars[7]}${chars[4]}`
-      function fromNumToLetter(num) {
-        const abs = Math.abs(num)
-        const result = alphabet[abs < 26 ? abs : abs % 26]
-        return result
+        for(let w = 0; w < forbidden.length; w++){
+          if (num[i] === forbidden[w]){
+            let splt = num[i].split('')
+            for(let e = 0; e < splt.length; e++){
+            
+              splt[e] = 'x' 
+            
+            }
+            num[i] = splt.join('')
+            
+          } 
+          
+        }
+        
       }
+     return num.join(' ')
     }
-    buildFinalResult(results)
+
+    // 👉 CHALLENGE 5
+    function normalizePhoneNumber(string) {
+      // 🧠 normalizePhoneNumber takes a string as its only argument, representing a ten-digit number
+      // The function returns a string formatted as seen below
+      // 🧠 Examples of usage:
+      // normalizePhoneNumber("9876543210") // returns "(987) 654-3210"
+      // normalizePhoneNumber("1111111111") // returns "(111) 111-1111"
+      // 🧠 Edge cases:
+      //   * If the argument is of an incorrect length, return the string "type a 10-digit number"
+      //   * If the argument is of the correct length but any character is not an integer between 0 and 9, return "invalid phone number"
+      // 🌟 HINT: instead of looping over the number's digits, loop backwards over a template "(XXX) XXX-XXXX"
+      // 🌟 HINT: at each iteration, if the current character is an "X", replace it with the result of popping a digit from the number
+      // 🌟 HINT: if you'd rather loop forwards, use `shift` instead of `pop`
+    size = string.split('')
+    let templateX = '(XXX) XXX-XXXX'
+    let template = templateX.split('')
+    let lastSize = size.length - 1
+    let final = '' 
+    
+    if (size.length !== 10){
+      return "type a 10-digit number"
+    }
+    for(y in size){
+        if (size[y] === 'x'){
+          return "invalid phone number"
+        }
+      }
+    
+      for(x = template.length - 1; x >= 0; x--){
+      if(template[x] === 'X'){
+        // let waste = template.pop(x)
+        template[x] = size[lastSize] 
+      --lastSize 
+      } 
+   
+  }
+    //  console.log(template)
+    for(x in template){
+      final = final + template[x]
+    }
+    return final
+    }
+
+    // 👉 CHALLENGE 6 (bonus, NOT graded)
+    function diceRolls() {
+      // 🧠 diceRolls takes no arguments and returns a number
+      // The function throws a six-sided dice until 3 sixes in a row are obtained
+      // The number of throws it took to obtain that third-in-a-row six is then returned from the function
+      // 🌟 HINT: research using `Math.random` to obtain a number from 1 to 6
+      // 🌟 HINT: use `while(true)` to throw the dice indefinitely, but avoid an infinite loop by making sure to break out eventually
+      // 🌟 HINT: you need to keep track of the total number of throws, as well as how many sixes in a row
+    
+    let countSix = 0
+    let countAll = 0
+      while(countSix <= 3){
+        let dice = Math.floor((Math.random() * 7) + 1) 
+        if(dice === 6){
+          ++countSix
+        }
+        ++countAll
+      }
+      return countAll
+    }
+
+    // 🧪 TESTS, do not make any changes below this line ===================
+    // 🧪 TESTS, do not make any changes below this line ===================
+    // 🧪 TESTS, do not make any changes below this line ===================
+    globalThis.challengeVersion = 1
+    globalThis.profileActivation = profileActivation
+    globalThis.mineSweeper = mineSweeper
+    globalThis.booleanize = booleanize
+    globalThis.scrub = scrub
+    globalThis.normalizePhoneNumber = normalizePhoneNumber
+
+    try {
+      runTests('CHALLENGE 1 - profileActivation', profileActivation, [
+        [[{}], 'impossible to ascertain status'],
+        [[{ active: true, reason: '' }], 'confirm status manually'],
+        [[{ active: true, reason: 'because' }], 'confirm status manually'],
+        [[{ active: false }], 'confirm status manually'],
+        [[{ active: true }, 'because'], { active: false, reason: 'because' }],
+        [[{ active: false, reason: 'because' }], { active: true }],
+      ])
+      runTests('CHALLENGE 2 - mineSweeper', mineSweeper, [
+        [[[["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]], 0, 4], "invalid coordinates"],
+        [[[["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]], 0, 1], "invalid coordinates"],
+        [[[["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]], 1, 4], "invalid coordinates"],
+        [[[["🟦", "🟦", "🟥"], ["🟦", "🟦", "🟦"], ["🟦", "🟦", "🟥"]], 1, 1], "🟦 🥳"],
+        [[[["🟦", "🟥", "🟦"], ["🟦", "🟦", "🟦"], ["🟥", "🟦", "🟥"]], 2, 1], "🟥 💀"],
+        [[[["🟥", "🟦", "🟥"], ["🟥", "🟥", "🟦"], ["🟥", "🟥", "🟦"]], 3, 1], "🟥 💀"],
+        [[[["🟥", "🟦", "🟦"], ["🟥", "🟦", "🟥"], ["🟦", "🟦", "🟦"]], 1, 2], "🟥 💀"],
+        [[[["🟥", "🟥", "🟥"], ["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟦"]], 2, 2], "🟦 🥳"],
+        [[[["🟥", "🟦", "🟦"], ["🟦", "🟥", "🟥"], ["🟥", "🟥", "🟦"]], 3, 2], "🟥 💀"],
+        [[[["🟥", "🟥", "🟥"], ["🟦", "🟦", "🟥"], ["🟥", "🟥", "🟦"]], 1, 3], "🟥 💀"],
+        [[[["🟥", "🟦", "🟥"], ["🟥", "🟥", "🟥"], ["🟥", "🟦", "🟥"]], 2, 3], "🟦 🥳"],
+        [[[["🟥", "🟥", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟥", "🟦"]], 3, 3], "🟦 🥳"],
+        [[[["🟥", "🟦", "🟦"], ["🟥", "🟥", "🟦"], ["🟥", "🟥", "🟥"]], 1, 1], "🟥 💀"],
+        [[[["🟥", "🟦", "🟦"], ["🟥", "🟥", "🟦"], ["🟥", "🟥", "🟥"]], 2, 2], "🟥 💀"],
+        [[[["🟥", "🟦", "🟦"], ["🟥", "🟥", "🟦"], ["🟥", "🟥", "🟥"]], 3, 3], "🟥 💀"],
+      ])
+      runTests('CHALLENGE 3 - booleanize', booleanize, [
+        [[{ bad1: null }], {}],
+        [[{ bad1: null, bad2: null }], {}],
+        [[{ '0123456789': 1 }], 'shorten all prop names to 9 chars or less'],
+        [[{ a: 1, b: 1 }], { a: true, b: true }],
+        [[{ a: 0, b: 0 }], { a: false, b: false }],
+        [[{ a: 1, b: 0, c: null, d: 'Lady Gaga' }], { a: true, b: false, d: 'Lady Gaga' }],
+      ])
+      runTests('CHALLENGE 4 - scrub', scrub, [
+        [["out of the silent planet", ["of", "silent"]], "out xx the xxxxxx planet"],
+        [["out of the silent planet", ["of", "planet"]], "out xx the silent xxxxxx"],
+        [["the ghost of the navigator", ["the"]], "xxx ghost of xxx navigator"],
+        [["lost somewhere in time", []], "lost somewhere in time"],
+        [["aces high", ["high", "aces", "hearts"]], "xxxx xxxx"],
+        [["", ["high", "aces"]], ""],
+      ])
+      runTests('CHALLENGE 5 - normalizePhoneNumber', normalizePhoneNumber, [
+        [["1234567890"], "(123) 456-7890"],
+        [["1111111111"], "(111) 111-1111"],
+        [["9876543210"], "(987) 654-3210"],
+        [[""], "type a 10-digit number"],
+        [["x"], "type a 10-digit number"],
+        [["987654321"], "type a 10-digit number"],
+        [["98765432100"], "type a 10-digit number"],
+        [["987654321x"], "invalid phone number"],
+        [["x876543210"], "invalid phone number"],
+        [["98765x3210"], "invalid phone number"],
+      ])
+      console.log('\nCHALLENGE 6 does not have auto tests')
+      function runTests(testName, func, tests) {
+        let results = []
+        tests.forEach(test => {
+          const originalArgsList = _.cloneDeep(test[0])
+          const argsList = test[0]
+          const expected = test[1]
+          const actual = func.apply(null, argsList)
+          results.push([argsList, expected, actual, originalArgsList])
+        })
+        console.log('\n' + testName)
+        if (results.every(result => _.isEqual(result[1], result[2]))) console.log('\t✅ All tests pass')
+        else if (results.every(result => !_.isEqual(result[1], result[2]))) console.log('\t❌ All tests fail')
+        else results.forEach((result, idx) => {
+          if (_.isEqual(result[1], result[2])) console.log(`\t✅ Test ${idx + 1} passes`)
+          else console.log(`\t❌ Test ${idx + 1} fails:
+        ${func.name}(${result[3].map(JSON.stringify)})
+        👉 should return ${JSON.stringify(result[1])}
+        👉 but returns ${JSON.stringify(result[2])}`)
+        })
+      }
+      const gridElems = [Array.from(row1.children), Array.from(row2.children), Array.from(row3.children)]
+      const squares = ["🟥", "🟦"]
+      let grid = [[], [], []]
+      gridElems.forEach((row, idxRow) => {
+        row.forEach((square, idxSquare) => {
+          const emoji = squares[Math.floor(Math.random() * 2)]
+          grid[idxRow].push(emoji)
+          if (emoji === squares[0]) square.style.backgroundColor = '#ffecec'
+          else square.style.backgroundColor = '#f2f2ff'
+          square.onclick = () => {
+            const x = idxSquare + 1
+            const y = idxRow + 1
+            console.log(`\nYou clicked coordinates [${x}, ${y}]`)
+            outcome.textContent = mineSweeper(grid, x, y)
+          }
+        })
+      })
+      phoneNumInput.oninput = evt => {
+        normalized.textContent = normalizePhoneNumber(evt.target.value)
+      }
+    } catch (err) { console.error(err.stack) }
   </script>
 </body>
 
